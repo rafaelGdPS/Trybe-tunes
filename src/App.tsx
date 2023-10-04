@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import Login from './components/login';
 import Search from './components/search';
+import Album from './components/album';
 
 function App() {
   return (
@@ -8,8 +9,11 @@ function App() {
       <p>Trybetunes</p>
       <Routes>
         <Route path="/" element={ <Login /> } />
-        <Route path="/search" element={ <Search /> } />
-        {/* <Route path="/album/:id" element={ } /> */}
+        <Route
+          path="/search"
+          element={ <Search /> }
+        />
+        <Route path="/album/:id" element={ <Album /> } />
       </Routes>
     </>
   );
