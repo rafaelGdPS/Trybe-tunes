@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { InputValue } from '../../types/types';
 import { createUser } from '../../services/userAPI';
 
@@ -9,13 +10,13 @@ const initialValue = {
 function Login() {
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState<InputValue>(initialValue);
-
+  const navigate = useNavigate();
   const handleClick = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
     await createUser(inputValue);
-
     setLoading(false);
+    navigate('/search');
   };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
