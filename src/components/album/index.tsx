@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import getMusics from '../../services/musicsAPI';
 import { AlbumType, SongType } from '../../types';
+import MusicCard from '../music-card';
 
 const initialAlbumType = {
   artistId: 0,
@@ -16,14 +17,13 @@ const initialAlbumType = {
 
 function Album() {
   const { id } = useParams();
-  const [load, setLoad] = useState(false);
+  const [load, setLoad] = useState(true);
   const [artist, setArtist] = useState<AlbumType>(initialAlbumType);
-  const [music, SetMusic] = useState<SongType[]>([]);
+  const [musics, SetMusic] = useState<SongType[]>([]);
   console.log(artist);
 
   useEffect(() => {
     if (id) {
-      setLoad(true);
       const musicsData = async () => {
         const response = await getMusics(id);
         const [albumType, ...song] = response;
@@ -31,12 +31,11 @@ function Album() {
         setArtist(albumType);
 
         SetMusic(song);
+        setLoad(false);
       };
       musicsData();
-
-      setLoad(false);
     }
-  }, []);
+  }, [id]);
   if (load) {
     return <h1>Carregando...</h1>;
   }
@@ -44,6 +43,14 @@ function Album() {
     <div>
       <h1 data-testid="artist-name">{ artist.artistName }</h1>
       <h2 data-testid="album-name">{artist.collectionName}</h2>
+      {musics.map((music) => (
+
+        <MusicCard
+          key={ music.trackId }
+          trackName={ music.trackName }
+          previewUrl={ music.previewUrl }
+        />
+      ))}
     </div>
   );
 }
