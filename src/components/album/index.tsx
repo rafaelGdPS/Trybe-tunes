@@ -26,6 +26,7 @@ function Album() {
     if (id) {
       const musicsData = async () => {
         const response = await getMusics(id);
+
         const [albumType, ...song] = response;
 
         setArtist(albumType);
