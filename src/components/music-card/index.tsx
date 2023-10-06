@@ -1,16 +1,26 @@
 import { useState } from 'react';
 import checkedImg from '../../images/checked_heart.png';
 import emptyCheck from '../../images/empty_heart.png';
-// ./src/images/empty_heart.png'
+import { SongType } from '../../types';
+import { addSong, removeSong } from '../../services/favoriteSongsAPI';
+
 type MusicProps = {
-  trackName: string;
-  previewUrl: string;
-  trackId: number;
+  music: SongType
 };
 
-function MusicCard({ trackName, previewUrl, trackId }: MusicProps) {
+function MusicCard({ music }: MusicProps) {
+  const { trackName, previewUrl, trackId } = music;
   const [isChecked, setIsChecked] = useState(false);
 
+  const addRemove = async () => {
+    setIsChecked((check) => !check);
+    if (!isChecked) {
+      await addSong(music);
+    } else {
+      await removeSong(music);
+    }
+  };
+  // isChecked ? addSong(music) : removeSong(music);
   return (
     <div>
       <audio data-testid="audio-component" src={ previewUrl } controls>
@@ -25,7 +35,7 @@ function MusicCard({ trackName, previewUrl, trackId }: MusicProps) {
         data-testid={ `checkbox-music-${trackId}` }
       >
         <input
-          onChange={ () => setIsChecked((check) => !check) }
+          onChange={ addRemove }
           checked={ isChecked }
           type="checkbox"
           name="favorite"
